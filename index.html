@@ -236,15 +236,21 @@ document.getElementById("formulaire").addEventListener("submit", function(e) {
 
   e.preventDefault();
 
-  const nom = document.getElementById("nom").value;
-  const prenom = document.getElementById("prenom").value;
+  const nom = document.getElementById("nom").value.trim();
+  const prenom = document.getElementById("prenom").value.trim();
   const pays = document.getElementById("pays").value;
   const universite = document.getElementById("universite").value;
 
-  if (nom === "" || prenom === "" || pays === "" || universite === "") {
+  // Vérification
+  if (!nom || !prenom || !pays || !universite) {
     alert("Veuillez remplir tous les champs.");
     return;
   }
+
+  // Désactiver le bouton pendant l'envoi
+  const bouton = document.querySelector("button[type='submit']");
+  bouton.disabled = true;
+  bouton.textContent = "Envoi en cours...";
 
   google.script.run
     .withSuccessHandler(function(message) {
@@ -252,15 +258,22 @@ document.getElementById("formulaire").addEventListener("submit", function(e) {
       document.getElementById("message").textContent = message;
       document.getElementById("message").style.display = "block";
 
+      // Vider le formulaire
       document.getElementById("formulaire").reset();
 
       document.getElementById("universite").innerHTML =
         '<option value="">-- Choisir une université --</option>';
 
-    })
-    .withFailureHandler(function(erreur) {
+      bouton.disabled = false;
+      bouton.textContent = "Envoyer la candidature";
 
-      alert("Erreur : " + erreur.message);
+    })
+    .withFailureHandler(function(error) {
+
+      alert("Une erreur est survenue : " + error.message);
+
+      bouton.disabled = false;
+      bouton.textContent = "Envoyer la candidature";
 
     })
     .enregistrerCandidature(
@@ -271,7 +284,6 @@ document.getElementById("formulaire").addEventListener("submit", function(e) {
     );
 
 });
-
 </script>
 
 </body>
