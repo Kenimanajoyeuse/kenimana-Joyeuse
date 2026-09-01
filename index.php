@@ -107,7 +107,7 @@
 </div>
 
 <script>
-
+const appScriptURL = "https://script.google.com/macros/s/AKfycbz_-f9rbucMYm4eOReUEYRM1vzSPNdT7ACKvSwrkguGVk0RGKIrzIuiuyRBeZ4jPcgv/exec";
 const universites = {
 
   "Burundi": [
